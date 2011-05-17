@@ -141,7 +141,6 @@ static struct usb_mass_storage_platform_data mass_storage_pdata = {
 	.vendor		= "HTC",
 	.product	= "Android Phone",
 	.release	= 0x0100,
-	.cdrom_lun	= 2,
 };
 
 static struct platform_device usb_mass_storage_device = {
@@ -151,6 +150,22 @@ static struct platform_device usb_mass_storage_device = {
 		.platform_data = &mass_storage_pdata,
 	},
 };
+
+#ifdef CONFIG_USB_ANDROID_RNDIS
+static struct usb_ether_platform_data rndis_pdata = {
+	/* ethaddr is filled by board_serialno_setup */
+	.vendorID       = 0x18d1,
+	.vendorDescr    = "Google, Inc.",
+};
+
+static struct platform_device rndis_device = {
+	.name   = "rndis",
+	.id     = -1,
+	.dev    = {
+		.platform_data = &rndis_pdata,
+	},
+};
+#endif
 
 static struct android_usb_platform_data android_usb_pdata = {
 	.vendor_id		= 0x0bb4,
@@ -297,7 +312,9 @@ static void mecha_add_usb_devices(void)
 	/* config_mecha_usb_id_gpios(0);*/
 	mecha_change_phy_voltage(0);
 	platform_device_register(&msm_device_hsusb);
-//	config_mecha_usb_uart_gpios();
+#ifdef CONFIG_USB_ANDROID_RNDIS
+	platform_device_register(&rndis_device);
+#endif
 	platform_device_register(&usb_mass_storage_device);
 	platform_device_register(&android_usb_device);
 }
