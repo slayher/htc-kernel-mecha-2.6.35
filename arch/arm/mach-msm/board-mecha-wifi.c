@@ -86,6 +86,7 @@ static struct wifi_platform_data mecha_wifi_control = {
 	.set_reset      = mecha_wifi_reset,
 	.set_carddetect = mecha_wifi_set_carddetect,
 	.mem_prealloc   = mecha_wifi_mem_prealloc,
+    .dot11n_enable  = 1
 };
 
 static struct platform_device mecha_wifi_device = {
